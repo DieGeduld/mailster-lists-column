@@ -50,20 +50,35 @@ class MailsterListsColumn {
      * Add list filter dropdown
      */
     public function add_list_filter() {
-        global $typenow;
+        global $typenow, $wpdb;
         
         if($typenow != 'newsletter') return;
         
         $selected_list = isset($_GET['mailster_list']) ? intval($_GET['mailster_list']) : 0;
         $lists = mailster('lists')->get();
         
+        // Get count of newsletters per list
+        $nl_counts = array();
+        foreach($lists as $list) {
+            $count = $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(DISTINCT post_id) 
+                FROM {$wpdb->postmeta} 
+                WHERE meta_key = '_mailster_lists' 
+                AND meta_value LIKE %s",
+                '%:"' . $list->ID . '";%'
+            ));
+            $nl_counts[$list->ID] = $count;
+        }
+        
         echo '<select name="mailster_list" class="mailster-list-filter">';
         echo '<option value="0">' . esc_html__('All Lists', 'mailster') . '</option>';
         echo '<option value="-1"' . selected($selected_list, -1, false) . '>' . esc_html__('No List', 'mailster') . '</option>';
         
         foreach($lists as $list) {
+            $subscriber_count = mailster('lists')->get_member_count($list->ID);
+            $newsletter_count = $nl_counts[$list->ID] ?? 0;
             echo '<option value="' . esc_attr($list->ID) . '" ' . selected($selected_list, $list->ID, false) . '>' 
-                . esc_html($list->name) . ' (' . mailster('lists')->get_member_count($list->ID) . ')</option>';
+                . esc_html($list->name) . sprintf(' (%d✉️ | %d👥)', $newsletter_count, $subscriber_count) . '</option>';
         }
         
         echo '</select>';
