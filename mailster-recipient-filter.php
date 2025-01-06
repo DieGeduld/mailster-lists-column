@@ -6,9 +6,10 @@ Plugin URI: https://unkonvenitonell.at
 Version: 1.0
 Author: Fabian Wolf
 Author URI: https://unkonvenitonell.at
+Text Domain: mailster-lists-column
 */
 
-class MailsterListsColumn {
+class MailsterListsColumnExtension {
 
     public function __construct() {
         add_filter('manage_edit-newsletter_columns', array($this, 'add_lists_column'), 11);
@@ -71,14 +72,14 @@ class MailsterListsColumn {
         }
         
         echo '<select name="mailster_list" class="mailster-list-filter">';
-        echo '<option value="0">' . esc_html__('All Lists', 'mailster') . '</option>';
-        echo '<option value="-1"' . selected($selected_list, -1, false) . '>' . esc_html__('No List', 'mailster') . '</option>';
+        echo '<option value="0">' . esc_html__('All Lists', 'mailster-lists-column') . '</option>';
+        echo '<option value="-1"' . selected($selected_list, -1, false) . '>' . esc_html__('No List', 'mailster-lists-column') . '</option>';
         
         foreach($lists as $list) {
             $subscriber_count = mailster('lists')->get_member_count($list->ID);
             $newsletter_count = $nl_counts[$list->ID] ?? 0;
             echo '<option value="' . esc_attr($list->ID) . '" ' . selected($selected_list, $list->ID, false) . '>' 
-                . esc_html($list->name) . sprintf(' (%d✉️ | %d👥)', $newsletter_count, $subscriber_count) . '</option>';
+                . esc_html($list->name) . sprintf(' (📧%d | 👥%d)', $newsletter_count, $subscriber_count) . '</option>';
         }
         
         echo '</select>';
@@ -138,14 +139,7 @@ class MailsterListsColumn {
         foreach($columns as $key => $value) {
             if($key == 'title') {
                 $new_columns[$key] = $value;
-                $new_columns['newsletter_lists'] = '<a href="' . admin_url('edit.php?post_type=newsletter&orderby=newsletter_lists&order=asc') . '">
-                    <span>' . esc_html__('Lists', 'mailster') . '</span>
-                    <span class="sorting-indicators">
-                        <span class="sorting-indicator asc" aria-hidden="true"></span>
-                        <span class="sorting-indicator desc" aria-hidden="true"></span>
-                    </span>
-                    <span class="screen-reader-text">' . esc_html__('Order Lists', 'mailster') . '</span>
-                </a>';
+                $new_columns['newsletter_lists'] = esc_html__('Lists', 'mailster-lists-column');
             } else {
                 $new_columns[$key] = $value; 
             }
@@ -188,7 +182,7 @@ class MailsterListsColumn {
             $lists = mailster('campaigns')->get_lists($post_id);
             
             if(empty($lists)) {
-                echo '<em>' . esc_html__('No lists selected', 'mailster') . '</em>';
+                echo '<em>' . esc_html__('No lists selected', 'mailster-lists-column') . '</em>';
                 return;
             }
             
@@ -201,7 +195,7 @@ class MailsterListsColumn {
             echo implode(', ', $list_names);
 
         } else {
-            echo '<em>' . esc_html__('All Lists', 'mailster') . '</em>';
+            echo '<em>' . esc_html__('All Lists', 'mailster-lists-column') . '</em>';
         }
         
         // Add additional info for sent campaigns
@@ -210,7 +204,7 @@ class MailsterListsColumn {
             $sent = mailster('campaigns')->get_sent($post_id);
             if($sent) {
                 echo '<br><small>' . sprintf(
-                    esc_html__('Sent to %s subscribers', 'mailster'),
+                    esc_html__('Sent to %s subscribers', 'mailster-lists-column'),
                     number_format_i18n($sent)
                 ) . '</small>';
             }
@@ -220,4 +214,4 @@ class MailsterListsColumn {
 }
 
 // Initialize the plugin
-new MailsterListsColumn();
+new MailsterListsColumnExtension();
