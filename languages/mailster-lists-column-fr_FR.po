@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr_FR\n"
+
+msgid "All Lists"
+msgstr "Toutes les listes"
+
+msgid "No List"
+msgstr "Aucune liste"
+
+msgid "Lists"
+msgstr "Listes"
+
+msgid "Order Lists"
+msgstr "Trier les listes"
+
+msgid "No lists selected"
+msgstr "Aucune liste sélectionnée"
+
+msgid "Sent to %s subscribers"
+msgstr "Envoyé à %s abonnés"

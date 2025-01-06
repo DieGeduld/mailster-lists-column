@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Mailster Lists Column Extension\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "All Lists"
+msgstr "Alle Listen"
+
+msgid "No List"
+msgstr ""
+
+msgid "Lists"
+msgstr "Listen"
+
+msgid "Order Lists"
+msgstr ""
+
+msgid "No lists selected"
+msgstr ""
+
+msgid "Sent to %s subscribers"
+msgstr ""

@@ -7,11 +7,14 @@ Version: 1.0
 Author: Fabian Wolf
 Author URI: https://unkonvenitonell.at
 Text Domain: mailster-lists-column
+Domain Path: /languages
 */
 
 class MailsterListsColumnExtension {
 
     public function __construct() {
+        add_action('init', array($this, 'load_textdomain'));
+
         add_filter('manage_edit-newsletter_columns', array($this, 'add_lists_column'), 11);
         add_action('manage_newsletter_posts_custom_column', array($this, 'lists_column_content'), 10, 2);
         add_filter('manage_edit-newsletter_sortable_columns', array($this, 'make_lists_column_sortable'));
@@ -21,6 +24,14 @@ class MailsterListsColumnExtension {
         // Add filter dropdown
         add_action('restrict_manage_posts', array($this, 'add_list_filter'));
         add_filter('parse_query', array($this, 'filter_campaigns_by_list'));
+    }
+
+    public function load_textdomain() {
+        load_plugin_textdomain(
+            'mailster-lists-column', 
+            false, 
+            dirname(plugin_basename(__FILE__)) . '/languages/'
+        );
     }
 
     /**
