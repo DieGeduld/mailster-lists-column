@@ -61,4 +61,4 @@ Yes, the subscriber counts are always up to date.
 Initial release with list column and filtering capabilities
 
 
-![screenshot](screenshot.png "Screenshot")
+![screenshotgit](screenshot.png "Screenshot")
